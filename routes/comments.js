@@ -1,9 +1,8 @@
-const express = require('express'),
-      router = express.Router(),
-      db = require('../models');
+const express =             require('express'),
+      router  =             express.Router(),
+      db =                  require('../models'),
+      { loginRequired } =   require ('../middleware/auth');
       
-   
-   
 router.get('/', function(req,res){
   db.Comment.find()
   .then(function(comments){
@@ -24,11 +23,7 @@ router.get('/:articleId', function(req, res){
   });
 });
 
-// router.get('/:commentId', function(req, res){
-//   res.send("This is the comment id route");
-// });
-
-router.post('/', function(req, res){
+router.post('/', loginRequired, function(req, res){
   db.Comment.create(req.body)
   .then(function(newComment){
     res.send(newComment);
